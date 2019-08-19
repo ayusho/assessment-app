@@ -4,7 +4,7 @@ var api = require('./api/api');
 var config = require('./config/config');
 var logger = require('./util/logger');
 
-require('mongoose').connect(config.db.url, { useNewUrlParser: true });
+require('mongoose').connect(config.db.url, { useNewUrlParser: true , useFindAndModify : false});
 
 if(config.seed){
     require('./util/seed');

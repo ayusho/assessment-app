@@ -11,7 +11,7 @@ var StudentSchema = new Schema({
         unique: true
     },
     assessment: [{
-        name: {
+        title: {
             type: String,
             ref: 'assessment' 
         },

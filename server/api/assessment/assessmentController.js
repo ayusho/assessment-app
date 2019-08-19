@@ -27,7 +27,9 @@ exports.get = function (req, res, next){
 };
 
 exports.post = function (req, res, next){
-    var newAssessment = req.body;
+    var newAssessment = {};
+    newAssessment.title = req.body.title;
+    newAssessment.assessment = req.files.assessment.data;
     
     Assessment.create(newAssessment)
         .then(function(assessment){
@@ -35,6 +37,9 @@ exports.post = function (req, res, next){
         }, function(err){
             logger.log(err);
             next(err);
+        })
+        .catch(function(err){
+            logger.log(err);
         });
 };
 

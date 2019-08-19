@@ -16,5 +16,8 @@ router.route('/:id')
 router.route('/:id/assign')
     .put(controller.assignAssessment)
 
+router.route('/:id/unassign')
+    .put(controller.unassignAssessment)
+
 
 module.exports = router;

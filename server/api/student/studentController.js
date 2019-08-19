@@ -79,13 +79,13 @@ exports.assignAssessment = function (req, res, next) {
             title: assessmentTitle
         })
         .then(function (assessment) {
-            logger.log('assessment' + assessment);
-            if(typeof assessment === 'Object'){
+            console.log(typeof assessment)
+            if(typeof assessment === 'object'){
                 _.merge(student, {
                     assessment: [{
-                        name: assessmentTitle
+                        title: assessmentTitle
                     }]
-                })
+                });
                 student.save(function (err, saved) {
                     if (err) {
                         next(err)
@@ -100,6 +100,25 @@ exports.assignAssessment = function (req, res, next) {
         });
 }
 
-exports.submitAssessment = function (req, res, next){
+exports.unassignAssessment = function(req, res, next){
+    var student = req.student;
+    var assessmentTitle = req.body.title;
+    _.merge(student, {
+        assessment: [{
+            name: assessmentTitle
+        }]
+    });
 
+    Student.update({ '$pull': {assessment: {'$elemMatch': {title: assessmentTitle}}}}, function(err, updated){
+        if(err){
+            next(err);
+        }
+        else{
+            res.json(updated);
+        }
+    })
+}
+
+exports.submitAssessment = function (req, res, next){
+    
 }
