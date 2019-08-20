@@ -2,6 +2,7 @@ var Student = require('./studentModel');
 var Assessment = require('../assessment/assessmentModel');
 var logger = require('../../util/logger');
 var _ = require('lodash');
+var Evalutor = require('../../util/evaluator');
 
 exports.params = function (req, res, next, id) {
     Student.findById(id)
@@ -120,5 +121,11 @@ exports.unassignAssessment = function(req, res, next){
 }
 
 exports.submitAssessment = function (req, res, next){
-    
+    Evalutor.getGrammer()
+        .then(grammerScore => {
+            res.json(grammerScore)
+        })
+        .catch(err => {
+            next(err);
+        })
 }
