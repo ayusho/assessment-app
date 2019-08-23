@@ -145,3 +145,18 @@ exports.submitAssessment = function (req, res, next){
             next(err);
         })
 }
+
+exports.leaderboard = function (req, res, next){
+    Student.aggregate([
+        {'$unwind': "$assessments"},
+        {"$project": {name: "$name", score: { "$add": ["$assessments.score.spelling", "$assessments.score.grammar", "$assessments.score.relevance"] }}},
+        {"$group": {_id: "$name", score: { "$sum": "$score"}}},
+        {"$sort": {score: -1}},
+        {"$project": {_id: 0, name: "$_id", score: "$score"}}
+    ])
+        .then(function (students) {
+            res.json(students);
+        }, function (err) {
+            next(err);
+        });
+}

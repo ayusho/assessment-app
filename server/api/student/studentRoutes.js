@@ -4,6 +4,9 @@ var controller = require('./studentController');
 
 router.param('id', controller.params);
 
+router.route('/leaderboard')
+    .get(controller.leaderboard);
+    
 router.route('/')
     .get(controller.get)
     .post(controller.post);
@@ -21,6 +24,5 @@ router.route('/:id/unassign')
 
 router.route('/:id/submit')
     .put(controller.submitAssessment)
-
 
 module.exports = router;
