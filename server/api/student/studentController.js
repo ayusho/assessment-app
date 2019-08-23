@@ -2,7 +2,7 @@ var Student = require('./studentModel');
 var Assessment = require('../assessment/assessmentModel');
 var logger = require('../../util/logger');
 var _ = require('lodash');
-var Evalutor = require('../../util/evaluator');
+var Evaluator = require('../../util/evaluator');
 
 exports.params = function (req, res, next, id) {
     Student.findById(id)
@@ -81,19 +81,19 @@ exports.assignAssessment = function (req, res, next) {
         })
         .then(function (assessment) {
             console.log(typeof assessment)
-            if(typeof assessment === 'object'){
-                _.merge(student, {
-                    assessment: [{
-                        title: assessmentTitle
-                    }]
-                });
-                student.save(function (err, saved) {
-                    if (err) {
-                        next(err)
-                    } else {
-                        res.json(saved);
+            if(assessment.length !== 0  ){
+                student.assessments.push({title: assessmentTitle});
+                Student.update({_id: student._id}, {"$push": {"assessments": { "title": assessmentTitle}  }}, function(err, updated){
+                    if(err){
+                        next(err);
+                    }
+                    else {
+                        res.json(updated);
                     }
                 })
+            }
+            else {
+                next(new Error('No Assignment with this ID found in record'))
             }
                 
         }, function(err){
@@ -110,7 +110,7 @@ exports.unassignAssessment = function(req, res, next){
         }]
     });
 
-    Student.update({ '$pull': {assessment: {'$elemMatch': {title: assessmentTitle}}}}, function(err, updated){
+    Student.update({ '$pull': {assessments: {'$elemMatch': {title: assessmentTitle}}}}, function(err, updated){
         if(err){
             next(err);
         }
@@ -121,9 +121,25 @@ exports.unassignAssessment = function(req, res, next){
 }
 
 exports.submitAssessment = function (req, res, next){
-    Evalutor.getGrammer()
-        .then(grammerScore => {
-            res.json(grammerScore)
+    var student = req.student;
+    var assessment = req.body.assessment;
+    var score = { spelling: '', grammar: '', relevance: ''};
+
+    Promise.all([Evaluator.getSpellings(), Evaluator.getGrammar(), Evaluator.getRelevance()])
+        .then(values => {
+            _.merge(score, {spelling: values[0].score}, {grammar: values[1].score}, {relevance: values[2].score} )
+            logger.log(student);
+            Student.update(
+                    {_id: student._id},
+                    {"$set": {"assessments.$[assessment].score": score }},
+                    { arrayFilters: [{'assessment.title': assessment.title}]}, function(err, updated){
+                if(err){    
+                    next(err);
+                }
+                else{
+                    res.json(updated);
+                }
+            })
         })
         .catch(err => {
             next(err);

@@ -10,7 +10,7 @@ var StudentSchema = new Schema({
         type: Number,
         unique: true
     },
-    assessment: [{
+    assessments: [{
         title: {
             type: String,
             ref: 'assessment' 

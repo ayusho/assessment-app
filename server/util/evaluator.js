@@ -37,7 +37,7 @@ var getSpellings = function (assessment) {
     });
 };
 
-var getGrammer = function (assessment) {
+var getGrammar = function (assessment) {
     return new Promise((resolve, reject) => {
         axios.post(config.grammarURL,
                 text,
@@ -52,7 +52,7 @@ var getGrammer = function (assessment) {
 
 
 module.exports = {
-    getGrammer,
+    getGrammar,
     getRelevance,
     getSpellings
 }
