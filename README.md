@@ -13,6 +13,9 @@ Note: Keep the mongodb service running before running the application, for devel
 Please keep in mind that you need to pass an id in URL for POST/PUT/Delete requests as is mentioned in the API references. 
 For eg. http://knolskape.herokuapp.com/api/student/5d6029772a286b0017b05bff/submit
 
+### For testing on POSTMAN
+#### HOST: http://knolskape.herokuapp.com
+
 ### Rest API collection reference
 POSTMAN Link: https://www.getpostman.com/collections/9c7b9f1ce012d85b4797
 
