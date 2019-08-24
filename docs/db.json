@@ -1,0 +1,29 @@
+[{
+    "teacherSchema": {
+        "_id": "5d60b64ebc862e567c16e9e3",
+        "name": "Neha Sharma",
+        "employeeCode": 12345
+    },
+    "studentSchema": {
+        "_id": "5d5fbce1ccbea83d70ec6aed",
+        "name": "Ayush Ojha",
+        "rollNumber": 675632,
+        "assessments": [{
+            "_id": "5d5fbd531dfaaf44487af8be",
+            "title": "BLM-2",
+            "score": {
+                "spelling": 38,
+                "grammar": 9,
+                "relevance": 72
+            }
+        }]
+    },
+    "assessmentSchema": {
+        "_id": "5d5f96bf5d45d02e743f8f32",
+        "title": "BLM-1",
+        "assessment": {
+            "$binary": "",
+            "$type": "00"
+        }
+    }
+}]
